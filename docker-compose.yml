@@ -1,0 +1,52 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: admin
+    #   MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - mongo_data:/data/db
+      - ./backend/benchmark-write-read.js:/docker-entrypoint-initdb.d/init.js
+    networks:
+      - microservices-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend-api
+    ports:
+      - "5000:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__MongoDB: mongodb://mongo:27017
+    depends_on:
+      - mongo
+    networks:
+      - microservices-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-api
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      BACKEND_URL: http://backend:5000
+    depends_on:
+      - backend
+    networks:
+      - microservices-network
+
+volumes:
+  mongo_data:
+
+networks:
+  microservices-network:
+    driver: bridge
