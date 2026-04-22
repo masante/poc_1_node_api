@@ -379,7 +379,7 @@ export function generateOrganisation(orgId, registrationAccreditationCount) {
 
   return {
     _id: generateObjectId(),
-    orgId,
+    orgId: String(orgId),
     systemReference: generateObjectId(),
     schemaVersion: 1,
     version: 1,

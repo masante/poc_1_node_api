@@ -26,7 +26,7 @@ export async function createOrganisationCollection(
           required: ['_id', 'orgId', 'schemaVersion', 'version'],
           properties: {
             orgId: {
-              bsonType: 'int',
+              bsonType: 'string',
               description: 'Unique identifier for organisation'
             },
             schemaVersion: {
