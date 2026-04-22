@@ -21,7 +21,7 @@ public class OrganisationService : IOrganisationService
     public OrganisationService(IMongoClient mongoClient)
     {
         var database = mongoClient.GetDatabase("epr");
-        _organisationCollection = database.GetCollection<Organisation>("organisations");
+        _organisationCollection = database.GetCollection<Organisation>("organisation_epr");
     }
 
     public async Task<List<Organisation>> GetAllOrganisationsAsync()
